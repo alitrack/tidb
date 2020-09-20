@@ -11,7 +11,8 @@ RUN  apt-get update \
 # Cleaning
 RUN apt-get clean
 
-USER root
+# Give back control
+USER gitpod
 
 # Install tiup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh 
