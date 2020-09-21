@@ -1,0 +1,40 @@
+# JDK8
+wget -c https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz
+tar xf amazon-corretto-8-x64-linux-jdk.tar.gz
+mv amazon-corretto-8.* jdk8
+
+
+echo "export JAVA_HOME=/workspace/tidb/jdk8" >>~/.bashrc 
+echo 'export PATH=$JAVA_HOME/bin:$PATH'>>~/.bashrc 
+
+# source ~/.bashrc
+export JAVA_HOME=/workspace/tidb/jdk8
+export PATH=$JAVA_HOME/bin:$PATH
+
+java -version
+
+# Spark 2.4.3
+wget -c https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz
+tar xf spark-2.4.3-bin-hadoop2.7.tgz
+mv spark-2.4.3-bin-hadoop2.7 spark
+cp ~/.tiup/components/tispark/v2.3.4/tispark-assembly-2.3.4.jar spark/jars/
+cp spark/conf/spark-defaults.conf.template spark/conf/spark-defaults.conf
+
+
+cat >>spark/conf/spark-defaults.conf <<EOF
+spark.tispark.pd.addresses 127.0.0.1:2379
+spark.sql.extensions org.apache.spark.sql.TiExtensions
+
+EOF
+
+## TiSpark sample data
+
+wget -c http://download.pingcap.org/tispark-sample-data.tar.gz
+tar xf tispark-sample-data.tar.gz 
+cd tispark-sample-data
+# mysql -uroot -P4000  -h 127.0.0.1 -e "drop database  tpch_001"
+mysql --local-infile=1 -h 127.0.0.1 -P 4000 -u root < dss.ddl
+cd ..
+
+./spark/bin/spark-sql
+
