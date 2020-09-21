@@ -17,5 +17,6 @@ USER gitpod
 # Install tiup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh 
 
+RUN ~/.tiup/bin/tiup install tidb  pd tikv tiflash tispark  playground
 # 
 CMD ~/.tiup/bin/tiup playground
