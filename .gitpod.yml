@@ -3,4 +3,4 @@ image:
 
 tasks:
   - init: 'echo "TODO: Replace with init/build command"'
-    command: '~/.tiup/bin/tiup playground'
+    command: 'echo "TODO: some command"'
